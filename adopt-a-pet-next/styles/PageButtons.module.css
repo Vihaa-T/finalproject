@@ -1,0 +1,30 @@
+.paginationButtons{
+    /* outline: 1px solid red; */
+    display: flex;
+    flex-direction:row;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    align-content:flex-start;
+    padding: 1rem;
+    margin: 2rem;
+    font-size: 1.25rem;
+
+    
+}
+.nextButton{
+    max-width: 100%;
+    font-size: inherit;
+    /* display: flex; */
+    /* flex-direction: row; */
+    
+    /* align-self: flex-end; */
+    /* align-items: flex-end; */
+    /* justify-content:space-around; */
+}
+
+.previousButton{
+    max-width: 100%;
+    font-size: inherit;
+    justify-content: flex-start;
+}
