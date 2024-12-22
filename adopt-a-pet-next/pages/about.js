@@ -14,7 +14,7 @@ const aboutPage = () => {
 			</Head>
 			<p>
 				<a href="https://github.com/eg744/Adopt-A-Pet-Next">
-					Adopt-A-Pet by Elijah Gillit
+					 Adopt-A-Pet by Group 8
 				</a>
 			</p>
 			<p>

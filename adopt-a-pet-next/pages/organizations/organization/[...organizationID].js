@@ -93,7 +93,7 @@ const OrganizationID = () => {
 						className={`${pageStyles.internalLink} ${pageStyles.btn}`}
 						href={result.url}
 					>
-						View this organization on Petfinder
+						 View this organization on Petfinder
 					</a>
 				</div>
 			</section>
