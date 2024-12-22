@@ -13,7 +13,7 @@ const aboutPage = () => {
 				/>
 			</Head>
 			<p>
-				<a href="https://github.com/eg744/Adopt-A-Pet-Next">
+				<a href="https://github.com/FHSS-USJ/final-assessment-group-8">
 					 Adopt-A-Pet by Group 8
 				</a>
 			</p>
