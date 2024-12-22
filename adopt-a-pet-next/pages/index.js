@@ -43,15 +43,7 @@ export default function Home() {
 				);
 				const animalDataJson = await animalData.json();
 
-				// get more animals to populate carousel array in case too many are filtered
-				// const secondPageAnimalData = await fetch(
-				// 	`${petfinderUrls.default}${animalDataJson.pagination._links.next.href}`,
-				// 	{
-				// 		headers: {
-				// 			Authorization: `Bearer ${token}`,
-				// 		},
-				// 	}
-				// );
+				 
 
 				setResults(animalDataJson.animals);
 
