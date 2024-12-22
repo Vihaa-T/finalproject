@@ -104,6 +104,6 @@ const PaginationButtons = ({
 	} catch (error) {
 		console.error(error);
 	}
-};
+ };
 
 export default PaginationButtons;
