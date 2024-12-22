@@ -172,7 +172,7 @@ const Slug = () => {
 
 				<ResultPage results={results} />
 				<PaginationButtons
-					data={data}
+					 data={data}
 					handleNextPageChange={handleNextPageChange}
 					handlePreviousPageChange={handlePreviousPageChange}
 				/>
