@@ -6,7 +6,7 @@ const AnimalImage = (props) => {
 	const { result } = props;
 
 	// Verify photos exist
-	if (result.photos[0] && result.photos[0].full) {
+	 if (result.photos[0] && result.photos[0].full) {
 		return (
 			<div className={cardStyles.image}>
 				<Image
