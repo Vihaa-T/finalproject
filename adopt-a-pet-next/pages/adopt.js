@@ -7,7 +7,7 @@ const AdoptPage = () => {
     <div>
       
       <p>Please fill the details below to submit your adoption request.</p>
-      <AdoptionRequestForm />
+      <AdoptionRequestForm /> //call the adopt request form
     </div>
   );
 };
