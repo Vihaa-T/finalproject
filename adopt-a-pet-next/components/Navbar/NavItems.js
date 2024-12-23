@@ -62,6 +62,9 @@ const NavItems = ({ open }) => {
       <li>
         <Link href="/register">Register</Link>
       </li>
+	  <li>
+          <Link href="/adopt">Adopt a Pet</Link> {/* Link to the Adoption Form */}
+        </li>
     </StyledUL>
   );
 };
