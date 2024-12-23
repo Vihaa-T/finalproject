@@ -1,0 +1,21 @@
+.pets-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.pet-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.pet-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.pet-card p {
+  margin: 5px 0;
+}
