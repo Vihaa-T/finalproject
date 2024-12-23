@@ -49,7 +49,7 @@
 	transition: background-color 0.3s;
   }
   
-  .nav .loginpage:hover, .nav .register:hover, , .nav .adopt {
+  .nav .loginpage:hover, .nav .register:hover, , .nav .adopt:hover {
 	background-color: #0056b3;
   }
   
