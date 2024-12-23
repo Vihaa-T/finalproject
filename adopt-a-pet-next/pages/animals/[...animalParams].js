@@ -1,183 +1,139 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { petfinderUrls } from '../../URLs/petfinderurls';
-
-import { PetFinderAuthContext } from '../_app';
 import AnimalInputField from '../../components/userInputs/AnimalInputField';
 import ResultPage from '../../components/Result-page';
 import PaginationButtons from '../../components/pageComponents/PaginationButtons';
 import pageStyles from '../../styles/AnimalResultPage.module.css';
-// import loadingAnimalPage from '../../components/pageComponents/animalPageComponents/loadingAnimalPage';
+import { PetFinderAuthContext } from '../../context/PetFinderAuthContext'; // Assuming this is defined in your context
 
 const Slug = () => {
-	const router = useRouter();
-	const token = useContext(PetFinderAuthContext);
+  const router = useRouter();
+  const token = useContext(PetFinderAuthContext);
 
-	const [isLoading, setIsLoading] = useState(true);
-	const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [results, setResults] = useState([]);
+  const [isValidRequest, setIsValidRequest] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentValidQuery, setCurrentValidQuery] = useState('');
 
-	const [results, setResults] = useState([]);
+  useEffect(() => {
+    const buildQuery = () => {
+      const queryParams = [];
 
-	const [isValidRequest, setIsValidRequest] = useState(false);
-	const [error, setError] = useState(null);
+      for (let key in router.query) {
+        if (router.query[key] && router.query[key] !== 'any') {
+          queryParams.push(`${key}=${router.query[key]}`);
+        }
+      }
 
-	const [currentValidQuery, setCurrentValidQuery] = useState(null);
+      // Construct query string
+      const queryString = queryParams.join('&');
+      setCurrentValidQuery(queryString);
+    };
 
-	useEffect(() => {
-		const getValidQueries = () => {
-			const currentAnimalRoute = [];
+    buildQuery();
+  }, [router.query]);
 
-			for (let key in router.query) {
-				// No empty/undefined params. Can accept many valid query params
-				if (router.query.hasOwnProperty(key)) {
-					if (
-						typeof router.query[key] === 'string' &&
-						router.query[key] !== '' &&
-						router.query[key] !== 'any'
-					) {
-						currentAnimalRoute.push({
-							key: key,
-							value: router.query[key],
-						});
-					}
-				}
-			}
+  const fetchPets = async () => {
+    setIsLoading(true);
+    setError(null);
 
-			// combined 2 functions here. both necessary in useeffect without unecessary dependencies.
-			let pfUrl = petfinderUrls.animals;
+    try {
+      const response = await fetch(`/api/pets?${currentValidQuery}`);
+      if (!response.ok) {
+        setIsValidRequest(false);
+        setIsLoading(false);
+        return;
+      }
 
-			currentAnimalRoute.map((query) => {
-				pfUrl +=
-					`${query.key}` +
-					'=' +
-					validFurryScalesOther(`${query.value}`) +
-					'&';
-			});
-			// limit={default: 20}
+      const petData = await response.json();
 
-			setCurrentValidQuery(pfUrl);
-		};
-		getValidQueries();
-	}, [router.query]);
+      // Handle empty results
+      if (petData.length === 0) {
+        setIsValidRequest(false);
+        setResults([]);
+        setIsLoading(false);
+        return;
+      }
 
-	// Regex to make valid request when animal type is 'small & furry', 'scales, fins, & other' to 'small-furry', 'scales-fins-other'
-	function validFurryScalesOther(string) {
-		let newString = string.replace(/\s/g, '');
-		newString = newString.replace(/&/g, '-');
-		newString = newString.replace(/,/g, '-');
-		return newString;
-	}
+      setData(petData);
+      setResults(petData);
+      setIsValidRequest(true);
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Error fetching pets:', err);
+      setError('Failed to fetch pets. Please try again later.');
+      setIsLoading(false);
+    }
+  };
 
-	const handleNextPageChange = () => {
-		const nextPage = data.pagination._links.next.href;
+  // Fetch data whenever the query changes
+  useEffect(() => {
+    if (currentValidQuery) {
+      fetchPets();
+    }
+  }, [currentValidQuery]);
 
-		const newAnimalPage = petfinderUrls.default + nextPage;
+  const handleNextPageChange = () => {
+    const nextOffset = parseInt(router.query.offset || 0) + 10;
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, offset: nextOffset },
+    });
+  };
 
-		setCurrentValidQuery(newAnimalPage);
-	};
+  const handlePreviousPageChange = () => {
+    const prevOffset = Math.max(0, parseInt(router.query.offset || 0) - 10);
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, offset: prevOffset },
+    });
+  };
 
-	const handlePreviousPageChange = () => {
-		const previousPage = data.pagination._links.previous.href;
+  // Handle validation and display of results
+  if (!isValidRequest && !isLoading) {
+    return (
+      <div>
+        <h1 className={pageStyles.searchResultHeader}>
+          Not a valid request. Please search for something else.
+        </h1>
+        <AnimalInputField />
+      </div>
+    );
+  } else if (isLoading) {
+    return (
+      <div>
+        <h1 className={pageStyles.searchResultHeader}>Loading...</h1>
+      </div>
+    );
+  } else if (!isLoading && results.length < 1) {
+    return (
+      <div>
+        <h1 className={pageStyles.searchResultHeader}>
+          No results found for your search. Please search again.
+        </h1>
+        <AnimalInputField />
+      </div>
+    );
+  } else if (!isLoading) {
+    return (
+      <div>
+        <AnimalInputField />
 
-		const newAnimalPage = petfinderUrls.default + previousPage;
-		setCurrentValidQuery(newAnimalPage);
-	};
+        <h1 className={pageStyles.searchResultHeader}>
+          Animals matching your search:
+        </h1>
 
-	useEffect(() => {
-		if (token === null) return;
-		try {
-			const fetchAnimals = async () => {
-				const animalData = await fetch(currentValidQuery, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
-
-				if (animalData.status !== 200) {
-					setIsValidRequest(false);
-					setIsLoading(false);
-					return;
-				}
-
-				const animalDataJson = await animalData.json();
-				setData(animalDataJson);
-
-				const filteredAnimals = [];
-				animalDataJson.animals.map((animal) => {
-					if (
-						// No images sometimes filter too much. Not sure if I want to have a placeholder. Description required.
-						// animal.photos &&
-						// animal.photos[0] &&
-						animal.description
-					) {
-						filteredAnimals.push(animal);
-					}
-				});
-				setIsValidRequest(true);
-				setResults(filteredAnimals);
-
-				setIsLoading(false);
-			};
-
-			fetchAnimals();
-		} catch (error) {
-			setError(error);
-			console.error(error);
-		}
-	}, [token, currentValidQuery]);
-
-	// Might want something like this to clean up jsx
-	// const PageText = (text) => {
-	// 	return (
-	// 		<div className="animalPageConditionText">
-	// 			<h1>{text}</h1>
-	// 			<AnimalInputField />
-	// 		</div>
-	// 	);
-	// };
-
-	// Look at different ways of conditionally rendering. This if/else chain is functional but I don't like it.
-	if (!isValidRequest && !isLoading) {
-		return (
-			<div>
-				<h1 className={pageStyles.searchResultHeader}>
-					Not a valid request. Please search for something else.
-				</h1>
-				<AnimalInputField />
-			</div>
-		);
-	} else if (isLoading) {
-		return (
-			<div>
-				<h1 className={pageStyles.searchResultHeader}>Loading...</h1>
-			</div>
-		);
-	} else if (!isLoading && results.length < 1) {
-		return (
-			<div>
-				<h1 className={pageStyles.searchResultHeader}>
-					No results found for your search. Please search again.
-				</h1>
-				<AnimalInputField />
-			</div>
-		);
-	} else if (!isLoading) {
-		return (
-			<div>
-				<AnimalInputField />
-
-				<h1 className={pageStyles.searchResultHeader}>
-					Animals matching your search:
-				</h1>
-
-				<ResultPage results={results} />
-				<PaginationButtons
-					 data={data}
-					handleNextPageChange={handleNextPageChange}
-					handlePreviousPageChange={handlePreviousPageChange}
-				/>
-			</div>
-		);
-	}
+        <ResultPage results={results} />
+        <PaginationButtons
+          data={data}
+          handleNextPageChange={handleNextPageChange}
+          handlePreviousPageChange={handlePreviousPageChange}
+        />
+      </div>
+    );
+  }
 };
+
 export default Slug;
