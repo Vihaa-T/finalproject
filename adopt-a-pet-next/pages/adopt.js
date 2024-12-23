@@ -5,8 +5,8 @@ import AdoptionRequestForm from '../components/AdoptionRequestForm'; // Adjust t
 const AdoptPage = () => {
   return (
     <div>
-      <h1>Adopt a Pet</h1>
-      <p>Please fill in the details to submit your adoption request.</p>
+      
+      <p>Please fill the details below to submit your adoption request.</p>
       <AdoptionRequestForm />
     </div>
   );
