@@ -37,7 +37,7 @@
 	border-color: #0070f3;
   }
   
-  /* Styling for Login and Register buttons */
+  /* Styling for Login and Register and Adopt buttons */
   .nav .loginpage, .nav .register, .nav .adopt {
 	padding: 10px 20px;
 	background-color: #0070f3;
