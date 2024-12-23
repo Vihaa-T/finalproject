@@ -72,5 +72,4 @@ const NavItems = ({ open }) => {
 export default NavItems;
 //navbar
 
-//navbar
 
