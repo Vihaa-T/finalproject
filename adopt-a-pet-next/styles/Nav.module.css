@@ -75,7 +75,7 @@
 	}
   
 	/* Styling for Login and Register and Adopt buttons in mobile view */
-	.nav .loginpage, .nav .register {
+	.nav .loginpage, .nav .register, , .nav .adopt {
 	  margin: 10px 0;
 	  font-size: 1.5rem;
 	  padding: 12px 20px;
