@@ -74,7 +74,7 @@
 	  text-align: center;
 	}
   
-	/* Styling for Login and Register buttons in mobile view */
+	/* Styling for Login and Register and Adopt buttons in mobile view */
 	.nav .loginpage, .nav .register {
 	  margin: 10px 0;
 	  font-size: 1.5rem;
