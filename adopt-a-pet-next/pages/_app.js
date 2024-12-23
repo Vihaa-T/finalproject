@@ -10,7 +10,7 @@ const MyApp = ({ Component, pageProps }) => {
 	const [accessToken, setAccessToken] = useState(null);
 
 	useEffect(() => {
-		const abortController = new AbortController();
+		 const abortController = new AbortController();
 
 		// Request access token
 		const fetchToken = async () => {

@@ -13,7 +13,7 @@ const ArticleList = ({ articles }) => {
 	return <div className={articleStyles.grid}>{articleItems}</div>;
 };
 
-export default ArticleList;
+ export default ArticleList;
 
 // const AnimalList = (props) =>{
 

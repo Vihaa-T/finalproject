@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import AnimalInputField from '../../components/userInputs/AnimalInputField';
 import ResultPage from '../../components/Result-page';
 import PaginationButtons from '../../components/pageComponents/PaginationButtons';
 import pageStyles from '../../styles/AnimalResultPage.module.css';
+import { PetFinderAuthContext } from '../../context/PetFinderAuthContext'; // Assuming this is defined in your context
 
 const Slug = () => {
   const router = useRouter();
+  const token = useContext(PetFinderAuthContext);
 
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [results, setResults] = useState([]);
   const [isValidRequest, setIsValidRequest] = useState(false);
   const [error, setError] = useState(null);
-
-  const [currentQuery, setCurrentQuery] = useState('');
+  const [currentValidQuery, setCurrentValidQuery] = useState('');
 
   useEffect(() => {
     const buildQuery = () => {
@@ -28,7 +29,7 @@ const Slug = () => {
 
       // Construct query string
       const queryString = queryParams.join('&');
-      setCurrentQuery(queryString);
+      setCurrentValidQuery(queryString);
     };
 
     buildQuery();
@@ -39,7 +40,7 @@ const Slug = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/pets?${currentQuery}`);
+      const response = await fetch(`/api/pets?${currentValidQuery}`);
       if (!response.ok) {
         setIsValidRequest(false);
         setIsLoading(false);
@@ -69,10 +70,10 @@ const Slug = () => {
 
   // Fetch data whenever the query changes
   useEffect(() => {
-    if (currentQuery) {
+    if (currentValidQuery) {
       fetchPets();
     }
-  }, [currentQuery]);
+  }, [currentValidQuery]);
 
   const handleNextPageChange = () => {
     const nextOffset = parseInt(router.query.offset || 0) + 10;
@@ -90,37 +91,49 @@ const Slug = () => {
     });
   };
 
+  // Handle validation and display of results
   if (!isValidRequest && !isLoading) {
     return (
       <div>
         <h1 className={pageStyles.searchResultHeader}>
-          No pets found. Please adjust your search criteria.
+          Not a valid request. Please search for something else.
         </h1>
         <AnimalInputField />
       </div>
     );
-  }
-
-  if (isLoading) {
+  } else if (isLoading) {
     return (
       <div>
         <h1 className={pageStyles.searchResultHeader}>Loading...</h1>
       </div>
     );
-  }
+  } else if (!isLoading && results.length < 1) {
+    return (
+      <div>
+        <h1 className={pageStyles.searchResultHeader}>
+          No results found for your search. Please search again.
+        </h1>
+        <AnimalInputField />
+      </div>
+    );
+  } else if (!isLoading) {
+    return (
+      <div>
+        <AnimalInputField />
 
-  return (
-    <div>
-      <AnimalInputField />
-      <h1 className={pageStyles.searchResultHeader}>Pets matching your search:</h1>
-      <ResultPage results={results} />
-      <PaginationButtons
-        data={data}
-        handleNextPageChange={handleNextPageChange}
-        handlePreviousPageChange={handlePreviousPageChange}
-      />
-    </div>
-  );
+        <h1 className={pageStyles.searchResultHeader}>
+          Animals matching your search:
+        </h1>
+
+        <ResultPage results={results} />
+        <PaginationButtons
+          data={data}
+          handleNextPageChange={handleNextPageChange}
+          handlePreviousPageChange={handlePreviousPageChange}
+        />
+      </div>
+    );
+  }
 };
 
 export default Slug;
