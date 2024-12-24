@@ -31,8 +31,7 @@ export default function Home() {
 		try {
 			const fetchAnimals = async () => {
 				const animalData = await fetch(
-					// request structure: "Authorization: Bearer {YOUR_ACCESS_TOKEN}" GET https://api.petfinder.com/v2/{CATEGORY}/{ACTION}?{parameter_1}={value_1}&{parameter_2}={value_2}
-					// https://www.petfinder.com/developers/v2/docs/#request-structure
+					 
 
 					`${petfinderUrls.animals}`,
 					{
