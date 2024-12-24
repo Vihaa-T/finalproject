@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PetCard from '../components/PetCard';  // Optional: If you want to display each pet in a card format
+import PetCard from '../components/PetCard';  
 
 const PetsList = ({ shelterId }) => {
   const [pets, setPets] = useState([]);
@@ -27,7 +27,7 @@ const PetsList = ({ shelterId }) => {
       <div className="pets-list">
         {pets.length > 0 ? (
           pets.map((pet) => (
-            <PetCard key={pet.id} pet={pet} />  // Display pet using PetCard component
+            <PetCard key={pet.id} pet={pet} />  // display pet card componant
           ))
         ) : (
           <p>No pets available</p>
