@@ -1,6 +1,13 @@
 import React from 'react';
-import Head from 'next/head';
-import AboutPage from '../styles/AboutPage.module.css';
+import Head from 'next/head'; // Import Head component for managing the document head
+import AboutPage from '../styles/AboutPage.module.css'; // Import custom CSS for styling
+
+
+/**
+ * AboutPage Component
+ * This page provides information about the project and the technologies used.
+ * It includes links to the project repository, Next.js documentation, and Petfinder API.
+ */
 
 const aboutPage = () => {
 	return (
