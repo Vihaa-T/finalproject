@@ -1,9 +1,5 @@
 Pet adoption website using Next.js framework and Petfinder's API for content. 
 
-Version 1.0
-
-View on Vercel at http://adopt-a-pet-bice.vercel.app/
-
 Search for different types and breeds of animals that are available for adoption near you. View each animal individually and see which shelter or organization they're at.
 
 Search for organizations in your area and see what animals they have available for adoption. View each organization to see their contact information.
