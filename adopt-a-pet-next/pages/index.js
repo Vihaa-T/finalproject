@@ -10,7 +10,7 @@ import Carousel from '../components/carouselComponents/Carousel';
 import { petfinderUrls } from '../URLs/petfinderurls';
 
 export default function Home() {
-	// Set, update state for recieved animals
+	// Set,  state and update for recieved animals
 	const [results, setResults] = useState(null);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,7 @@ export default function Home() {
 	const [petTypesAvailable, setPetTypesAvailable] = useState([]);
 
 	// play around with useref, see if it can replace pettypes, breeds in animalinput. Might not be the right choice.
-	// const petTypeArray = useRef([]);
+	 
 
 	// Current recieved access token
 	const token = useContext(PetFinderAuthContext);
